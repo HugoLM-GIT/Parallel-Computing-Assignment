@@ -1,0 +1,35 @@
+import threading
+import random
+import time
+
+# Function to simulate a cashier processing a single customer
+def process_customer(lane_id, customer):
+    processing_time = random.uniform(0.5, 2.0)
+    print(f"Lane {lane_id} processing customer {customer}...")
+    time.sleep(processing_time)
+    print(f"Lane {lane_id} finished processing customer {customer}.")
+
+# Main function to simulate the supermarket checkout process
+def main():
+    num_customers = 20  # Total number of customers
+    num_cashiers = 7    # Total number of cashiers
+
+    # Sequentially assign customers to cashiers
+    customers = list(range(1, num_customers + 1))
+
+    threads = []
+
+    # Start threads for each cashier
+    for i in range(num_cashiers):
+        thread = threading.Thread(target=process_customer, args=(i + 1, customers[i]))
+        threads.append(thread)
+        thread.start()
+
+    # Wait for all threads to finish
+    for thread in threads:
+        thread.join()
+
+    print("All customers have been processed.")
+
+if __name__ == "__main__":
+    main()
